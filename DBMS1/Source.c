@@ -142,27 +142,7 @@ x:
 			goto x;
 		}
 		break;
-		case 5:
-		{
-
-		}
-		break;
-		case 6:
-		{
-
-		}
-		break;
-		case 7:
-		{
-
-		}
-		break;
-		case 8:
-		{
-
-		}
-		break;
-		case 9: 
+		case 9:
 		{
 			exit(0);
 		}
