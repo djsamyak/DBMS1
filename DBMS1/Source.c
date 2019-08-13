@@ -15,27 +15,20 @@ struct LibData
 	char genre[20];
 	char user[30];
 	int status;
-	time_t timeOut[40]; //asctime(&t)
+	time_t timeOut;
+	time_t timeIn;
 	time_t ETA;
 };
 
 struct LibData data[100];
+int fineAmount;
 
 void main()
 {
 	{
-		printf("%d \n", currentTime);
-		time_t rawtime;
-		struct tm *info;
-		char buffer[80];
-
-		time(&rawtime);
-
-		info = localtime(&rawtime);
-
-		strftime(buffer, 80, "%c", info);
+		printf("%d \n", currentTime);										//To be removed
 	}
-	int ch, fineAmount, i, totalEntries=0, Entry;
+	int ch, i, totalEntries=0, Entry, lateDays, Record, fineTotal;
 	char ch1;
 	FILE * fpw, * fpr;
 x:
@@ -65,7 +58,7 @@ x:
 				printf("\n");
 				for (i = 0; i < totalEntries; ++i);
 				{
-					while (fscanf(fpr, "%d %s %s", &data[i].Sno, &data[i].name, &data[i].genre) != EOF)
+					while (fscanf(fpr, "%d %s %s", &data[i].Sno, data[i].name, data[i].genre) != EOF)
 					{
 						printf("%3d|%15s|%10s|\n", data[i].Sno, data[i].name, data[i].genre);
 					}
@@ -86,7 +79,7 @@ x:
 				{
 					totalEntries++;
 					printf("Enter the data of the book (Serial Number, Name, Genre)\n");
-					scanf("%d %s %s", &data[totalEntries].Sno, &data[totalEntries].name, &data[totalEntries].genre);
+					scanf("%d %s %s", &data[totalEntries].Sno, data[totalEntries].name, data[totalEntries].genre);
 					fprintf(fpw, "%d %s %s\n", data[totalEntries].Sno, data[totalEntries].name, data[totalEntries].genre);
 					fflush(fpw);
 				}
@@ -127,7 +120,7 @@ x:
 			scanf("%d", &Entry);
 			for (i = 0; i < totalEntries; ++i);
 			{
-				while (fscanf(fpr, "%d %s %s %s %d", &data[i].Sno, &data[i].name, &data[i].genre, &data[i].status, &data[i].user, &data[i].timeOut, &data[i].ETA) != EOF)
+				while (fscanf(fpr, "%d %s %s %s %d", &data[i].Sno, data[i].name, data[i].genre, data[i].status, &data[i].user, &data[i].timeOut) != EOF)
 				{
 					if (Entry == data[i].Sno)
 					{
@@ -142,6 +135,57 @@ x:
 			goto x;
 		}
 		break;
+		case 5:
+		{
+			printf("Set the fine amount\n");
+			scanf("%d",&fineAmount);
+
+		break;
+		case 6:
+		{
+			printf("Enter the record number to be issued \n");
+			scanf("%d",&Record);
+			for (i = 0; i < totalEntries; ++i);
+			{
+				if(Record == data[i].Sno)
+				{
+					data[i].timeOut==currentTime;
+					printf("Enter the user's name \n");
+					scanf("%s",data[i].user);
+					data[i].status=1;
+				}
+			}
+		}
+		break;
+		case 7:
+		{
+			printf("Enter the record number to be returned \n");
+			scanf("%d",&Record);
+			for (i = 0; i < totalEntries; ++i);
+			{
+				if(Record == data[i].Sno)
+				{
+					data[i].timeIn==currentTime;
+				}
+				if((data->timeIn-data->timeOut)>(7*86400))
+				{
+					lateDays=((data->timeIn-data->timeOut)/86400)-7;
+					fineTotal=fineAmount*lateDays;
+					printf("Fine amount is %d Rupees. \n",fineTotal);
+				}
+			}
+		}
+		case 8:
+		{
+			printf("Enter the record number to be renewed \n");
+			scanf("%d",&Record);
+			for (i = 0; i < totalEntries; ++i);
+			{
+				if(Record == data[i].Sno)
+				{
+					data->timeOut=currentTime;
+				}
+		}
 		case 9:
 		{
 			exit(0);
@@ -153,4 +197,6 @@ x:
 			goto x;
 		}
 		}
+	}
+}
 }
