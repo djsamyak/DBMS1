@@ -60,7 +60,12 @@ x:
 				{
 					while (fscanf(fpr, "%d %s %s", &data[i].Sno, data[i].name, data[i].genre) != EOF)
 					{
-						printf("%3d|%15s|%10s|\n", data[i].Sno, data[i].name, data[i].genre);
+						{
+							if(data[i].status == 0)
+								printf("%3d|%15s|%10s| IN |\n", data[i].Sno, data[i].name, data[i].genre);
+							else if(data[i].status == 1)
+								printf("%3d|%15s|%10s| OUT |%10s|%350s|%d|\n", data[i].Sno, data[i].name, data[i].genre, data[i].user, data[i].timeOut);
+						}
 					}
 				}
 			}
@@ -81,7 +86,7 @@ x:
 					printf("Enter the data of the book (Serial Number, Name, Genre)\n");
 					scanf("%d %s %s", &data[totalEntries].Sno, data[totalEntries].name, data[totalEntries].genre);
 					fprintf(fpw, "%d %s %s\n", data[totalEntries].Sno, data[totalEntries].name, data[totalEntries].genre);
-					fflush(fpw);
+					//fflush(fpw);
 				}
 				else
 					if (ch1 == 'n')
@@ -116,7 +121,7 @@ x:
 		case 4:
 		{
 			fpr = fopen("data.txt", "r");
-			printf("Enter the Serial Number of the entry to be viewed");
+			printf("\nEnter the Serial Number of the entry to be viewed \n");
 			scanf("%d", &Entry);
 			for (i = 0; i < totalEntries; ++i);
 			{
@@ -139,6 +144,7 @@ x:
 		{
 			printf("Set the fine amount\n");
 			scanf("%d",&fineAmount);
+			goto x;
 
 		break;
 		case 6:
@@ -149,12 +155,13 @@ x:
 			{
 				if(Record == data[i].Sno)
 				{
-					data[i].timeOut==currentTime;
+					data[i].timeOut=currentTime;
 					printf("Enter the user's name \n");
 					scanf("%s",data[i].user);
 					data[i].status=1;
 				}
 			}
+			goto x;
 		}
 		break;
 		case 7:
@@ -165,7 +172,8 @@ x:
 			{
 				if(Record == data[i].Sno)
 				{
-					data[i].timeIn==currentTime;
+					data[i].timeIn=currentTime;
+					data[i].status=0;
 				}
 				if((data->timeIn-data->timeOut)>(7*86400))
 				{
@@ -174,6 +182,7 @@ x:
 					printf("Fine amount is %d Rupees. \n",fineTotal);
 				}
 			}
+			goto x;
 		}
 		case 8:
 		{
@@ -185,6 +194,8 @@ x:
 				{
 					data->timeOut=currentTime;
 				}
+			}
+			goto x;
 		}
 		case 9:
 		{
@@ -198,5 +209,4 @@ x:
 		}
 		}
 	}
-}
 }
