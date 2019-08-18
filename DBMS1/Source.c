@@ -21,14 +21,14 @@ struct LibData
 };
 
 struct LibData data[100];
-int fineAmount;
+int fineAmount, totalEntries=0;
 
 void main()
 {
 	{
 		printf("%d \n", currentTime);										//To be removed
 	}
-	int ch, i, totalEntries=0, Entry, lateDays, Record, fineTotal;
+	int ch, i, Entry, lateDays, Record, fineTotal;
 	char ch1;
 	FILE * fpw, * fpr;
 x:
@@ -82,11 +82,11 @@ x:
 				scanf(" %c", &ch1);
 				if (ch1 == 'y')
 				{
-					totalEntries++;
 					printf("Enter the data of the book (Serial Number, Name, Genre)\n");
 					scanf("%d %s %s", &data[totalEntries].Sno, data[totalEntries].name, data[totalEntries].genre);
 					fprintf(fpw, "%d %s %s\n", data[totalEntries].Sno, data[totalEntries].name, data[totalEntries].genre);
-					//fflush(fpw);
+					totalEntries++;
+					fflush(fpw);
 				}
 				else
 					if (ch1 == 'n')
@@ -151,8 +151,10 @@ x:
 		{
 			printf("Enter the record number to be issued \n");
 			scanf("%d",&Record);
-			for (i = 0; i < totalEntries; ++i);
+			printf("\n %d \n",totalEntries);
+			for (i = 0; i < totalEntries; ++i)
 			{
+				printf("\n %d \n",i);
 				if(Record == data[i].Sno)
 				{
 					data[i].timeOut=currentTime;
@@ -160,6 +162,7 @@ x:
 					scanf("%s",data[i].user);
 					data[i].status=1;
 				}
+				printf("\n %d \n",i);
 			}
 			goto x;
 		}
